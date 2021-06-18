@@ -1,12 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Raghib Shahriar</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="section-intro padding-y-sm">
+<div class="container">
+
+<div class="intro-banner-wrap">
+	<img src="{% static 'images/banners/1.jpg' %}" class="img-fluid rounded">
+</div>
+
+</div> <!-- container //  -->
+</section>
+<section class="section-name padding-y-sm">
+<div class="container">
+
+<header class="section-heading">
+	<h3 class="section-title text-center">All products</h3>
+</header>
+<br>
+	
+<div class="row">
+	{% for product in products %}
+	<div class="col-md-3">
+		<div class="card card-product-grid">
+			<a href="" class="img-wrap"> <img src="{{ product.product_image.url }}"> </a>
+			<figcaption class="info-wrap">
+				<a href="" class="title">{{ product.product_name }}</a>
+				<div class="price mt-1">{{ product.product_price }} Tk</div> <!-- price-wrap.// -->
+			</figcaption>
+		</div>
+	</div>
+	{% endfor %} <!-- col.// -->
+</div> <!-- row.// -->
+<div class="float-right">
+	<a href="" class="btn btn-outline-primary ">See all</a>
+	</div>
+<br><br>
+<hr><br>
+<header class="section-heading">
+	<h3 class="section-title text-center">All products</h3>
+</header><br>
+<div class="row">
+	{% for product in products %}
+	<div class="col-md-3">
+		<div class="card card-product-grid">
+			<a href="" class="img-wrap"> <img src="{{ product.product_image.url }}"> </a>
+			<figcaption class="info-wrap">
+				<a href="" class="title">{{ product.product_name }}</a>
+				<div class="price mt-1">{{ product.product_price }} Tk</div> <!-- price-wrap.// -->
+			</figcaption>
+		</div>
+	</div>
+	{% endfor %}
+	 <!-- col.// -->
+</div> <!-- row.// -->
+<div class="float-right">
+	<a href="" class="btn btn-outline-primary ">See all</a>
+	</div>
+<br><br>
+</div><!-- container // -->
+</section>
+{% endblock content %}
