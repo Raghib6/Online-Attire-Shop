@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User
 from django.http.response import HttpResponse
-from django.shortcuts import render,redirect
+from django.shortcuts import get_object_or_404, render,redirect
 from products.models import Category, Product
-from accounts.models import UserAccount
-from accounts.forms import UserRegistrationForm
+from accounts.models import UserAccount, UserProfile
+from accounts.forms import UserRegistrationForm,UserAccForm,UserProfileForm
 from django.contrib import messages,auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
@@ -14,7 +14,7 @@ from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, message
 
 def registration(request):
     if request.method=="POST":
@@ -38,7 +38,7 @@ def registration(request):
 
             current_site = get_current_site(request)
             mail_subject = "Use this to activate your account in Oshop"
-            message = render_to_string('activation.html',{
+            message = render_to_string('accounts/activation.html',{
                 'user':user,
                 'domain':current_site,
                 'uid'   : urlsafe_base64_encode(force_bytes(user.pk)),
@@ -52,7 +52,7 @@ def registration(request):
         form = UserRegistrationForm()
             
     context = {'form':form,}
-    return render(request,'registration.html',context)
+    return render(request,'accounts/registration.html',context)
 
 def activate(request,uidb64,token):
     try:
@@ -89,14 +89,6 @@ def usernameChecker(request):
         else:
             return HttpResponse('Does not exists')
 
-def passwordLength(request):
-    if request.method=="GET":
-        pwd = request.GET["password1"]
-        if len(pwd)<8:
-            return HttpResponse('Less')
-        else:
-            return HttpResponse('Does not exists')
-
 
 def login(request):
     if request.method=="POST":
@@ -110,10 +102,60 @@ def login(request):
         else:
             messages.error(request,"Invalid Login credential")
             return redirect('login')
-    return render(request,'login.html')
+    return render(request,'accounts/login.html')
 
 @login_required(login_url='login')
 def logout(request):
     auth.logout(request)
     messages.success(request,"You are logged out")
     return redirect('login')
+
+@login_required(login_url='login')
+def dashboard(request):
+    return render(request,'accounts/default.html')
+
+@login_required(login_url='login')
+def edit_profile(request):
+    userprofile = get_object_or_404(UserProfile,user=request.user)
+    if request.method == "POST":
+        user_form     = UserAccForm(request.POST,instance=request.user)
+        profile_form  = UserProfileForm(request.POST,request.FILES,instance=userprofile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request,"Profile has been updated")
+            return redirect('editprofile')
+    else:
+        user_form       = UserAccForm(instance=request.user)
+        profile_form    = UserProfileForm(instance=userprofile)
+
+    context = {
+        'userprofile' : userprofile,
+        'user_form'    : user_form,
+        'profile_form' : profile_form,
+    }
+    return render(request,'accounts/edit_profile.html',context)
+
+@login_required(login_url='login')
+def change_password(request):
+    if request.method=="POST":
+        old_password = request.POST['old_password']
+        new_password1 = request.POST['new_password1']
+        new_password2 = request.POST['new_password2']
+
+        user = UserAccount.objects.get(username__exact=request.user.username)
+
+        if new_password1 == new_password2:
+            check = user.check_password(old_password)
+            if check:
+                user.set_password(new_password1)
+                user.save()
+                auth.logout(request)
+                messages.success(request,"Password updated successfully")
+                return redirect('login')
+    
+            else:
+                messages.error(request,"The old password you have entered is incorrect")
+                return redirect('password_change')
+
+    return render(request,'accounts/change_password.html')

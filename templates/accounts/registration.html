@@ -1,0 +1,122 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block content %}
+
+<div class="card mx-auto" style="max-width: 520px; margin-top: 40px">
+  <article class="card-body">
+    {% include 'accounts/alerts.html' %}
+    <header class="mb-4"><h4 class="card-title">Sign up</h4></header>
+    <form action="{% url 'register' %}" method="POST" autocomplete="off">
+      {% csrf_token %}
+      <div class="form-row">
+        <div class="col form-group">
+          <label>First name</label>
+          {{form.first_name}}
+        </div>
+        <!-- form-group end.// -->
+        <div class="col form-group">
+          <label>Last name</label>
+          {{form.last_name}}
+        </div>
+        <!-- form-group end.// -->
+      </div>
+      <!-- form-row end.// -->
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Username</label>
+          {{form.username}}
+          <span id="unresult"></span>
+        </div>
+        <div class="form-group col-md-6">
+          <label>Phone</label>
+          {{form.phone}}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label>Email</label>
+          {{form.email}}
+          <span id="result"></span>
+        </div>
+      </div>
+      <!-- form-row.// -->
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Create password</label>
+          {{form.password}}
+          <span id="msg"></span>
+        </div>
+        <!-- form-group end.// -->
+        <div class="form-group col-md-6">
+          <label>Repeat password</label>
+          {{form.c_password}}
+          <span id="messg"></span>
+        </div>
+        <!-- form-group end.// -->
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-block" id="button">
+          Register
+        </button>
+      </div>
+      <!-- form-group// -->
+      {{form.email.errors}} {{form.non_field_errors}}
+    </form>
+  </article>
+  <!-- card-body.// -->
+</div>
+<!-- card .// -->
+<p class="text-center mt-4">
+  Have an account? <a href="{% url 'login' %}">Log In</a>
+</p>
+<br /><br />
+
+<script>
+function checkEmail() {
+  let emal = document.getElementById("e_mail").value;
+  $.ajax({
+    url: "{% url 'emailchecker' %}",
+    type: "get",
+    data: { em: emal },
+    success: function (data) {
+      if (data == "Exists") {
+        $("#result")
+          .html("This email is already taken")
+          .addClass("text-danger");
+        $("#e_mail").addClass("alert alert-danger");
+        $("#button").attr("disabled", "disabled");
+      } else {
+        $("#result").html("");
+        $("#e_mail").removeClass("alert alert-danger");
+        $("#button").removeAttr("disabled");
+      }
+    },
+  });
+}
+
+function checkUsername() {
+  let un = document.getElementById("username").value;
+  $.ajax({
+    url: "{% url 'usernamechecker' %}",
+    type: "get",
+    data: { uname: un },
+    success: function (data) {
+      if (data == "Exists") {
+        $("#unresult")
+          .html("This username is already taken")
+          .addClass("text-danger");
+        $("#username").addClass("alert alert-danger");
+        $("#button").attr("disabled", "disabled");
+      } else {
+        $("#unresult").html("");
+        $("#username").removeClass("alert alert-danger");
+    
+      }
+    },
+  });
+}
+</script>
+<script src="{% static 'js/validation.js' %}"></script>
+{% endblock content %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="section-conten padding-y bg">
+{% include 'accounts/alerts.html' %}
+<div class="container">
+	<div class="row">
+	{% include 'accounts/dash_sidebar.html' %}
+	<main class="col-md-9">
+		<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Logged in as :</strong>
+			<span>{{ user.first_name }} {{ user.last_name }}</span>
+		</header>
+		<div class="card-body">
+			<div class="tab-content p-4 p-md-4" id="v-pills-tabContent">
+
+			{% block cont %}
+
+            {% endblock cont %}
+
+			</div>
+		</div> 
+		</article> 
+	</main>
+</div> 
+</div>
+
+
+</section>
+{% endblock content %}

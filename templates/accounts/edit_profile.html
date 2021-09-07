@@ -1,0 +1,82 @@
+{% extends 'accounts/dash.html' %}
+{% load static %}
+{% block cont %}
+
+<div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+  <div class="text-center">
+    <img src="{{userprofile.profile_pic.url}}" width="100" style="border-radius:50px;" alt="profile picture">
+  </div>
+  <h3 class="mb-4">Edit Profile</h3>
+  <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>First Name</label>
+          {{ user_form.first_name }}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Last Name</label>
+          {{ user_form.last_name }}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Username</label>
+          {{ user_form.username }}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Phone number</label>
+          {{ user_form.phone }}
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Image</label>
+          {{profile_form.profile_pic}}
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Address Line 1</label>
+          {{profile_form.address_line1}}
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Address Line 2</label>
+          {{profile_form.address_line2}}
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Region</label>
+          {{profile_form.region}}
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Country</label>
+           {{profile_form.country}}
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button class="btn btn-primary">Update</button>
+      <a href="{% url 'dashboard' %}" class="btn btn-danger ml-2">Cancel</a>
+    </div>
+  </form>
+
+</div>
+
+{% endblock cont %}
