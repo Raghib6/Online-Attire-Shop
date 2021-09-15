@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from .managers import CustomUserManager
-
+from django.utils.safestring import mark_safe
 
 class UserAccount(AbstractBaseUser):
     first_name      =       models.CharField(max_length=50)
@@ -37,7 +37,7 @@ class UserProfile(models.Model):
     user            = models.OneToOneField(UserAccount, on_delete=models.CASCADE)
     address_line1   = models.CharField(null=True,blank=True, max_length=150)
     address_line2   = models.CharField(null=True,blank=True, max_length=150)
-    profile_pic     = models.ImageField(blank=True,upload_to='profile_pic')
+    profile_pic     = models.ImageField(blank=True,upload_to='profile_pic',default="profile_pic/m.jpg")
     region          = models.CharField(blank=True,max_length=50)
     country         = models.CharField(default="Bangladesh",blank=True,max_length=50)
 
@@ -46,4 +46,5 @@ class UserProfile(models.Model):
 
     def full_address(self):
         return f"{self.address_line1},{self.address_line2}"
+
     
