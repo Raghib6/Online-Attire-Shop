@@ -1,0 +1,91 @@
+{% extends 'accounts/dash.html' %}
+
+{% block cont %}
+<style>
+  body{
+			background-color: #ebeff5;
+		}
+
+
+		#total-orders{
+			background-color: #4cb4c7;
+		}
+
+
+		#orders-delivered{
+			background-color: #7abecc;
+		}
+
+		#orders-pending{
+			background-color: #7CD1C0;
+		}
+
+</style>
+<div class="row">
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center text-white  mb-3" id="total-orders">
+			  	<div class="card-header bg-primary">
+			  		<h5 class="card-title">Total Orders</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title">{{total_orders}}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center text-white  mb-3" id="orders-delivered">
+			  	<div class="card-header bg-success">
+			  		<h5 class="card-title">Orders Delivered</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title">{{delivered}}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center text-white mb-3" id="orders-pending">
+			  	<div class="card-header bg-warning ">
+			  		<h5 class="card-title">Orders Accepted</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title">{{pending}}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+<table class="table table-hover" mt-0>
+  <thead>
+    <tr>
+      <th scope="col">No </th>
+      <th scope="col">Order Number</th>
+      <th scope="col">Billing Name</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Order Total</th>
+      <th scope="col">Order Status</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <th scope="row">{{order.order_number}}</th>
+      <td>{{order.full_name}}</td>
+      <td>{{order.phone}}</td>
+      <td>{{order.order_total}} Tk</td>
+      <td>{{order.status}}</td>
+      <td>{{order.date_created}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock cont %}
+

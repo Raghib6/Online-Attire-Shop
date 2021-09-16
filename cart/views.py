@@ -1,8 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from cart.models import Cart,CartItem
 from products.models import Product
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.contrib.auth.decorators import login_required
 
 def _cartid(request):
     cart = request.session.session_key
@@ -108,3 +109,31 @@ def remove_from_cart(request,product_id):
     cart_item.delete()
     return redirect('cart')
     
+
+@login_required(login_url='login')
+def checkout(request,total=0,quantity=0,cart_items=None): 
+    try:
+        tax=0
+        grand_total=0
+        if request.user.is_authenticated:
+            cart_items = CartItem.objects.all().filter(user=request.user,is_active=True)
+        else:
+            cart = Cart.objects.get(cart_id=_cartid(request))
+            cart_items = CartItem.objects.filter(cart=cart,is_active=True)
+        for cart_item in cart_items:
+            total += (cart_item.cart_product.product_price * cart_item.cart_quantity)
+            quantity += cart_item.cart_quantity
+        
+        shipping = 75
+        grand_total = total+shipping
+    except ObjectDoesNotExist:
+        pass
+    
+    context = {
+        'total' : total,
+        'quantity' : quantity,
+        'cart_items' : cart_items,
+        'shipping' : shipping,
+        'grand_total' : grand_total,
+    }
+    return render(request,'orders/checkout.html',context)

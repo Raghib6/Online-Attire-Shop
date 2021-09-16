@@ -35,11 +35,11 @@ class UserAccount(AbstractBaseUser):
 
 class UserProfile(models.Model):
     user            = models.OneToOneField(UserAccount, on_delete=models.CASCADE)
-    address_line1   = models.CharField(null=True,blank=True, max_length=150)
-    address_line2   = models.CharField(null=True,blank=True, max_length=150)
+    address_line1   = models.CharField(null=True,blank=True, max_length=500)
+    address_line2   = models.CharField(null=True,blank=True, max_length=500)
     profile_pic     = models.ImageField(blank=True,upload_to='profile_pic',default="profile_pic/m.jpg")
-    region          = models.CharField(blank=True,max_length=50)
-    country         = models.CharField(default="Bangladesh",blank=True,max_length=50)
+    region          = models.CharField(blank=True,max_length=150)
+    country         = models.CharField(default="Bangladesh",blank=True,max_length=150)
 
     def __str__(self):
         return self.user.first_name #from useraccount accessing first name

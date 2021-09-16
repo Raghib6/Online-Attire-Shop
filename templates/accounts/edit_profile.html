@@ -1,7 +1,7 @@
 {% extends 'accounts/dash.html' %}
 {% load static %}
 {% block cont %}
-
+<div class="tab-content p-4 p-md-4" id="v-pills-tabContent">
 <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
   <div class="text-center">
     <img src="{{userprofile.profile_pic.url}}" width="100" style="border-radius:50px;" alt="profile picture">
@@ -77,6 +77,7 @@
     </div>
   </form>
 
+</div>
 </div>
 
 {% endblock cont %}

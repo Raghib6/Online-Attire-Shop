@@ -7,6 +7,7 @@ from accounts.forms import UserRegistrationForm,UserAccForm,UserProfileForm
 from django.contrib import messages,auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+from orders.models import Order
 
 # To activate user account we have to import this.
 from django.contrib.sites.shortcuts import get_current_site
@@ -112,7 +113,8 @@ def logout(request):
 
 @login_required(login_url='login')
 def dashboard(request):
-    return render(request,'accounts/default.html')
+    user_profile = get_object_or_404(UserProfile,user_id=request.user.id)
+    return render(request,'accounts/profile.html',{'userprofile':user_profile})
 
 @login_required(login_url='login')
 def edit_profile(request):
@@ -159,3 +161,12 @@ def change_password(request):
                 return redirect('password_change')
 
     return render(request,'accounts/change_password.html')
+
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user,is_ordered=True).order_by('-date_created')
+    user_all_order = request.user.order_set.all()
+    total_orders = user_all_order.filter(is_ordered=True).count()
+    delivered = user_all_order.filter(status='Completed').count()
+    pending = user_all_order.filter(status='Accepted').count()
+    context = {'orders':orders,'user_all_order':user_all_order,'total_orders':total_orders,'delivered':delivered,'pending':pending}
+    return render(request,'orders/my_orders.html',context)
