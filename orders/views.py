@@ -138,4 +138,3 @@ def order_completed(request):
     except (Payment.DoesNotExist,Order.DoesNotExist):
         return redirect('store')
 
-    

@@ -1,16 +1,23 @@
+from orders.models import ProductOrdered
+from store.forms import ReviewRatingForm
+from store.models import ReviewRating
 from django.http.response import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from products.models import Category, Product
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.views.generic import ListView
 import json
 from accounts.models import UserAccount
+from django.contrib import messages
+from django.db.models import Q
 
 def home(request):
     imen = Product.objects.filter(product_cat__cat_parent__cat_name='Men')[:12]
     iwomen = Product.objects.filter(product_cat__cat_parent__cat_name='Women')[:12]
-    
+    products = Product.objects.all().filter(is_available=True)
+    for product in products:
+        reviews = ReviewRating.objects.filter(product_id=product.id,status=True)
     if 'term' in request.GET:
         qs = Product.objects.filter(product_name__icontains=request.GET.get('term'))
         titles = []
@@ -18,7 +25,7 @@ def home(request):
             titles.append(product.product_name)
         return JsonResponse(titles, safe=False)
 
-    context = {'imen':imen,'iwomen':iwomen,}
+    context = {'imen':imen,'iwomen':iwomen,'reviews':reviews}
     return render(request,'index.html',context)
     
 def storepage(request,category_slug=None):
@@ -60,11 +67,61 @@ def product_details(request,category_slug,product_slug):
 
     except Exception as e:
         raise e
+    if request.user.is_authenticated:
+        try:
+            ordered_product = ProductOrdered.objects.filter(user=request.user,product_id=single_product.id).exists()
+        except ProductOrdered.DoesNotExist:
+            ordered_product = None
+    else:
+        ordered_product = None
 
+    reviews = ReviewRating.objects.filter(product_id=single_product.id,status=True)
     context = {
-        'single_product':single_product,
+        'single_product'  : single_product,
+        'ordered_product' : ordered_product,
+        'reviews'         : reviews,
     }
 
     return render(request,'product_details.html',context)
+
+
+def submit_review(request,productid):
+    current_url = request.META.get('HTTP_REFERER')
+    if request.method == "POST":
+        try:
+            reviews = ReviewRating.objects.get(user__id=request.user.id,product__id=productid)
+            form = ReviewRatingForm(request.POST,instance=reviews)
+            form.save()
+            messages.success(request,"Thank you! Your review has been updated")
+            return redirect(current_url)
+        except ReviewRating.DoesNotExist:
+            form = ReviewRatingForm(request.POST)
+            if form.is_valid():
+                data = ReviewRating()
+                data.subject    = form.cleaned_data['subject']
+                data.rating     = form.cleaned_data['rating']
+                data.review     = form.cleaned_data['review']
+                data.ip         = request.META.get('REMOTE_ADDR')
+                data.product_id = productid
+                data.user_id    = request.user.id
+                data.save()
+                messages.success(request,"Thank you for your review")
+                return redirect(current_url)
+
+def search(request):
+    if 'keyword' in request.GET:
+        keyword = request.GET['keyword']
+        if keyword:
+            store_products = Product.objects.order_by('-date_created').filter(Q(product_desc__icontains=keyword) | Q(product_name__icontains=keyword))
+            total_products = store_products.count()
+        else:
+            return render(request,'store.html',{'total_products':0})
+    context = {
+        'store_products':store_products,
+        'total_products' : total_products,
+    }
+    return render(request,'store.html',context)
+
+
 
 

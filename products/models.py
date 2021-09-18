@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from store.models import ReviewRating
+from django.db.models import Avg,Count
 
 class Category(models.Model):
     cat_name        = models.CharField(max_length=50,unique=True)
@@ -37,3 +39,17 @@ class Product(models.Model):
     def get_url(self):
         return reverse('product_details',
         args=[self.product_cat.cat_slug,self.product_slug])
+
+    def average_rating(self):
+        reviews = ReviewRating.objects.filter(product=self,status=True).aggregate(average=Avg('rating'))
+        avg = 0
+        if reviews['average'] is not None:
+            avg = float(reviews['average'])
+        return avg
+
+    def count_reviews(self):
+        reviews = ReviewRating.objects.filter(product=self,status=True).aggregate(count=Count('id'))
+        count = 0
+        if reviews['count'] is not None:
+            count = float(reviews['count'])
+        return count

@@ -1,13 +1,11 @@
-from django.contrib.auth.models import User
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, render,redirect
-from products.models import Category, Product
 from accounts.models import UserAccount, UserProfile
 from accounts.forms import UserRegistrationForm,UserAccForm,UserProfileForm
 from django.contrib import messages,auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from orders.models import Order
+from orders.models import Order, ProductOrdered
 
 # To activate user account we have to import this.
 from django.contrib.sites.shortcuts import get_current_site
@@ -15,7 +13,7 @@ from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import EmailMessage, message
+from django.core.mail import EmailMessage
 
 def registration(request):
     if request.method=="POST":
@@ -161,7 +159,8 @@ def change_password(request):
                 return redirect('password_change')
 
     return render(request,'accounts/change_password.html')
-
+    
+@login_required(login_url='login')
 def my_orders(request):
     orders = Order.objects.filter(user=request.user,is_ordered=True).order_by('-date_created')
     user_all_order = request.user.order_set.all()
@@ -170,3 +169,17 @@ def my_orders(request):
     pending = user_all_order.filter(status='Accepted').count()
     context = {'orders':orders,'user_all_order':user_all_order,'total_orders':total_orders,'delivered':delivered,'pending':pending}
     return render(request,'orders/my_orders.html',context)
+
+@login_required(login_url='login')
+def order_details(request,orderid):
+    order_details = ProductOrdered.objects.filter(order__order_number=orderid)
+    order        = Order.objects.get(order_number=orderid)
+    for item in order_details:
+        sub_total = item.product_price * item.quantity
+
+    context = {
+        'order_details' : order_details,
+        'order'         : order,
+        'sub_total'     : sub_total,
+    }
+    return render(request,'orders/order_details.html',context)

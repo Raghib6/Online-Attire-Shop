@@ -29,5 +29,5 @@ urlpatterns = [
     # Password change
     path('password_change/',views.change_password,name='password_change'),
     path('my_orders/',views.my_orders,name='my_orders'),
-    
+    path('order_details/<int:orderid>/',views.order_details,name='order_details'),
 ]

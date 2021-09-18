@@ -2,7 +2,13 @@
 {% block content %}
 
 <section class="section-pagetop bg">
-
+<div class="container">
+{% if 'search' in request.path %}
+	<h2 class="title-page">Search Result</h2>
+{% else %}
+	<h2 class="title-page">Our Store</h2>
+{% endif %}
+</div> 
 </section>
 <!-- ========================= SECTION INTRO END// ========================= -->
 
