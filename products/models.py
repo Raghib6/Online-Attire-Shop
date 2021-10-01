@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from store.models import ReviewRating
 from django.db.models import Avg,Count
+from django.utils.html import mark_safe
 
 class Category(models.Model):
     cat_name        = models.CharField(max_length=50,unique=True)
@@ -51,5 +52,7 @@ class Product(models.Model):
         reviews = ReviewRating.objects.filter(product=self,status=True).aggregate(count=Count('id'))
         count = 0
         if reviews['count'] is not None:
-            count = float(reviews['count'])
+            count = int(reviews['count'])
         return count
+
+

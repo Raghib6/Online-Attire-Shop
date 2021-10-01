@@ -1,19 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<style>
+#l1 a{
+	color : white;
+}
+
+</style>
 <section class="section-pagetop bg">
 <div class="container">
 {% if 'search' in request.path %}
-	<h2 class="title-page">Search Result</h2>
-{% else %}
-	<h2 class="title-page">Our Store</h2>
+	<h2 class="title-page text-center">Search Result</h2>
+
 {% endif %}
 </div> 
 </section>
 <!-- ========================= SECTION INTRO END// ========================= -->
 
 <!-- ========================= SECTION CONTENT ========================= -->
-<section class="section-content padding-y">
+<section class="section-content">
 <div class="container">
 
 <div class="row">
@@ -29,11 +34,12 @@
 		</header>
 		<div class="filter-content collapse show" id="collapse_1" style="">
 			<div class="card-body">
-				<ul class="list-menu">
+				<ul class="list-group">
+				<li class="list-group-item active" id="l1"><a href="{% url 'store' %}">All Products</a></li>
 				{% for category in parent_cat %}
-				<li class="alert alert-primary"><a href="{{category.get_url}}">{{ category.cat_name }}</a></li>
+					<li class="list-group-item"><a href="{{category.get_url}}">{{ category.cat_name }}</a></li>
 				{% for subcat in category.child.all %}
-				<li><a href="{{subcat.get_url}}">{{subcat.cat_name}}</a></li>
+				<li class="list-group-item"><a href="{{subcat.get_url}}">{{subcat.cat_name}}</a></li>
 				{% endfor %}
 				{% endfor %}
 				</ul>
@@ -121,8 +127,11 @@
 
 <header class="border-bottom mb-4 pb-3">
 		<div class="form-inline">
+		{% if keyword %}
+			<span class="mr-md-auto"><b>{{ total_products }}</b> results found for <span class="text-warning"><b>"{{keyword}}"</b></span></span>
+		{% else %}
 			<span class="mr-md-auto"><b>{{ total_products }}</b> items found </span>
-			
+		{% endif %}
 		</div>
 </header><!-- sect-heading -->
 
@@ -179,6 +188,15 @@
   </ul>
   {% endif %}
 </nav>
+
+
+<script>
+  $(function () {
+    $("#searchproduct").autocomplete({
+      source: '{% url 'store' %}'
+    });
+  });
+</script>
 
 {% endblock content %}
 

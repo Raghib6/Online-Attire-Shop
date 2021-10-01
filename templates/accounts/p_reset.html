@@ -1,28 +1,20 @@
 {% extends 'base.html' %} 
 {% block content %}
+{% load crispy_forms_tags %}          
+	<!--Reset Password-->
+	<div class="container p-5">
+  	 	<h1 class="font-weight-bold mt-3 text-center text-warning">Reset Password</h1>
+		<hr>
+		<p class="text-center"><b>Forgotten your password? Enter your email address below, and we'll send you a email for setting a new one.</b></p>
+        <div class="form-row align-center">
+      	<div class="form-group col-md-6 mb-4">
+		<form method="POST">
+            {% csrf_token %}
+           {{form|crispy}}                    
+            <button class="btn btn-primary" type="submit">Send email</button>
+        </form>
+  		</div> 
+		</div>
+	</div>
 
- <section class="sign-in">
-            <div class="container">
-                <div class="signin-content">
-                
-                    <div class="signin-image">
-                        <a href="{% url 'home' %}" class="signup-image-link">Home</a>
-                    </div>
-                    <div class="signin-form">
-                        <h2 class="form-title">Reset Password</h2>
-                        <form action="" method="POST" class="register-form" id="login-form">
-                        {% csrf_token %}
-                            <div class="form-group">
-                                <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                {{form.email}}
-                            </div>
-                            <div class="form-group form-button">
-                                <input type="submit" id="signin" class="form-submit" value="Send Email"/>
-                            </div>
-                            
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-{% endblock%}
+{% endblock %}

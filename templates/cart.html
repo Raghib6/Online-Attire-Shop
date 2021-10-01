@@ -35,7 +35,15 @@
 			<div class="aside"><img src="{{item.cart_product.product_image.url}}" class="img-sm"></div>
 			<figcaption class="info">
 				<a href="#" class="title text-dark">{{item.cart_product.product_name}}</a>
-				<p class="text-muted small">Matrix: 25 Mpx <br> Brand: Canon</p>
+				<p class="text-muted small">Brand: OAS <br></p>
+				<span class="rating-star p-0">
+				<i class="fa fa-star{% if item.cart_product.average_rating < 0.5 %}-o{% elif item.cart_product.average_rating >= 0.5 and item.average_rating < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+				<i class="fa fa-star{% if item.cart_product.average_rating < 1.5 %}-o{% elif item.cart_product.average_rating >= 1.5 and item.average_rating < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+				<i class="fa fa-star{% if item.cart_product.average_rating < 2.5 %}-o{% elif item.cart_product.average_rating >= 2.5 and item.average_rating < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+				<i class="fa fa-star{% if item.cart_product.average_rating < 3.5 %}-o{% elif item.cart_product.average_rating >= 3.5 and item.average_rating < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+				<i class="fa fa-star{% if item.cart_product.average_rating < 4.5 %}-o{% elif item.cart_product.average_rating >= 4.5 and item.average_rating < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+				</span>
+				<p class="text-muted small"><span class="text-danger"><b>{{item.cart_product.product_stock}}</b></span> items left</p>
 			</figcaption>
 		</figure>
 	</td>
@@ -56,7 +64,7 @@
 	<td> 
 		<div class="price-wrap"> 
 			<var class="price">{{item.sub_total}} Tk</var> 
-			<small class="text-muted"> {{item.cart_product.product_price}} Tk</small> 
+			<small class="text-muted"> {{item.cart_product.product_price}} Tk each</small> 
 		</div> <!-- price-wrap .// -->
 	</td>
 	<td class="text-right"> 

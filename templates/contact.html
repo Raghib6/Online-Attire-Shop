@@ -1,0 +1,11 @@
+{% autoescape off %}
+{% if user|length > 0 %}
+Full Name : {{user.first_mame}} {{user.last_mame}}
+Email    : {{user.email}}
+{% else %}
+Full Name : {{ full_name }}
+Email     : {{ email }}
+{% endif %}
+
+{{ message }}
+{% endautoescape %}

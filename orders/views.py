@@ -8,8 +8,9 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage, message
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.decorators import login_required
 
-
+@login_required(login_url='login')
 def place_orders(request,total=0,quantity=0):
     current_user = request.user
     cart_items   = CartItem.objects.filter(user=current_user)
@@ -62,7 +63,7 @@ def place_orders(request,total=0,quantity=0):
     else:
         return redirect('checkout')
 
-
+@login_required(login_url='login')
 def payments(request):
     body  = json.loads(request.body)
     order = Order.objects.get(user=request.user,is_ordered=False,order_number=body['orderID'])
@@ -95,6 +96,9 @@ def payments(request):
 
         product = Product.objects.get(id=item.cart_product_id)
         product.product_stock-=item.cart_quantity
+       
+        if product.product_stock < 1:
+            product.is_available = False
         product.save()
     CartItem.objects.filter(user=request.user).delete()
 
@@ -113,15 +117,16 @@ def payments(request):
     }
     return JsonResponse(data,safe=False)
 
-
+@login_required(login_url='login')
 def order_completed(request):
     order_number   = request.GET.get('order_number') #order_number is from payments.html url
     transactionId = request.GET.get('payment_id') #payment_id is from payments.html url
     try:
         order = Order.objects.get(order_number=order_number,is_ordered=True)
         ordered_products = ProductOrdered.objects.filter(order_id=order.id)
+        sub_total = 0
         for item in ordered_products:
-            sub_total = item.product_price * item.quantity
+            sub_total += item.product_price * item.quantity
 
         payment = Payment.objects.get(payment_id=transactionId)
 

@@ -2,16 +2,13 @@
 {% load static %}
 {% block content %}
 
-<div class="container" style="margin-top: 50px;">
-    <center><i class="fas fa-check-circle" style="font-size: 72px;margin-bottom: 20px;color: #28A745;"></i></center>
-    <h2 class="text-center">Order Successful</h2>
+<div class="container" style="margin-top: 50px">
+    <center><i class="fas fa-check-circle" style="font-size: 50px;margin-bottom: 10px;color: #28A745;"></i></center>
+    <h2 class="text-center mb-0">Order Successful</h2>
 	<br>
-	<div class="text-center">
-		<a href="{% url 'store' %}" class="btn btn-success">Shop more</a>
-	</div>
 </div>
 
-<div class="container" style="margin: 0 auto;width: 50%;padding: 50px;background: #f1f1f1;margin-top: 50px;margin-bottom: 50px;">
+<div class="container" style="margin: 0 auto;width: 50%;padding: 50px;background: #f1f1f1;margin-top: 10px;margin-bottom: 40px;">
     <div class="row invoice row-printable">
         <div class="col-md-12">
             <!-- col-lg-12 start here -->
@@ -32,7 +29,7 @@
                                     <li><strong>Invoiced To</strong></li>
                                     <li>{{order.full_name}}</li>
                                     <li>{{order.full_address}}</li>
-                                    <li>{{order.upazila_than}}</li>
+                                    <li>{{order.upazila_thana}}</li>
                                     <li>{{order.city}}</li>
                                 </ul>
                             </div>
@@ -58,7 +55,8 @@
                                             <tr>
                                                 <th class="per70 text-center">Description</th>
                                                 <th class="per5 text-center">Qty</th>
-                                                <th class="per25 text-center">Total</th>
+                                                <th class="per5 text-center">Price (each)</th>
+                                                <th class="per25 text-center">Total Price</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -67,20 +65,22 @@
                                                 <td>{{item.product.product_name}}</td>
                                                 <td class="text-center">{{item.quantity}}</td>
                                                 <td class="text-center">{{item.product.product_price}} Tk</td>
+                                                <td class="text-center">{{item.eachTotal}} Tk</td>
                                             </tr>
                                         </tbody>
                                         {% endfor %}
                                         <tfoot>
+                                        
                                             <tr>
-                                                <th colspan="2" class="text-right">Sub Total:</th>
+                                                <th colspan="3" class="text-right">Sub Total:</th>
                                                 <th class="text-center">{{sub_total}} Tk</th>
                                             </tr>
                                             <tr>
-                                                <th colspan="2" class="text-right">Shipping Cost:</th>
+                                                <th colspan="3" class="text-right">Shipping Cost:</th>
                                                 <th class="text-center">{{order.shipping}} Tk</th>
                                             </tr>
                                             <tr>
-                                                <th colspan="2" class="text-right">Grand Total:</th>
+                                                <th colspan="3" class="text-right">Grand Total:</th>
                                                 <th class="text-center">{{order.order_total}} Tk</th>
                                             </tr>
                                         </tfoot>
@@ -88,7 +88,7 @@
                                 </div>
                             </div>
                             <div class="invoice-footer mt25">
-                                <p class="text-center">Thank you for shopping with us!</p>
+                                <p class="text-center text-success">Thank you for shopping with us!</p>
                             </div>
                         </div>
                         <!-- col-lg-12 end here -->

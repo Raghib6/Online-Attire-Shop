@@ -5,7 +5,7 @@ from django.utils.html import format_html
 
 class AdminAccount(UserAdmin):
     list_display = ('username','first_name','last_name','email','date_joined','last_login','is_active')
-    list_filter = ('email','username','first_name')
+    list_filter = ('is_superuser','is_admin','is_staff','email','username','first_name')
     list_display_links = ('username','email','first_name','last_name')
     readonly_fields = ('date_joined','last_login')
     ordering = ('-date_joined',)

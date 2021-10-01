@@ -174,8 +174,9 @@ def my_orders(request):
 def order_details(request,orderid):
     order_details = ProductOrdered.objects.filter(order__order_number=orderid)
     order        = Order.objects.get(order_number=orderid)
+    sub_total = 0
     for item in order_details:
-        sub_total = item.product_price * item.quantity
+        sub_total += item.product_price * item.quantity
 
     context = {
         'order_details' : order_details,

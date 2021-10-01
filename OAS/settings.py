@@ -10,6 +10,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+
+
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -37,7 +39,14 @@ INSTALLED_APPS = [
     'orders',
 
     'admin_honeypot',
+    'crispy_forms',
+    'django_extensions',
 ]
+
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -69,13 +78,14 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'OAS.wsgi.application'
 
 
 DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE'),
-        'NAME': BASE_DIR / config('DB_NAME'),
+        'NAME': config('DB_NAME'),
     }
 }
 
@@ -137,3 +147,5 @@ EMAIL_PORT = config('PORT')
 EMAIL_HOST_USER = config('EMAIL')
 EMAIL_HOST_PASSWORD = config('PASSWORD')
 EMAIL_USE_TLS = True
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

@@ -63,4 +63,7 @@ class ProductOrdered(models.Model):
 
     def __str__(self):
         return self.product.product_name
+
+    def eachTotal(self):
+        return self.product.product_price * self.quantity
     

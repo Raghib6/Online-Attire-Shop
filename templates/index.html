@@ -66,110 +66,16 @@
             <a href="{{product.get_url}}" class="title">{{ product.product_name }}</a>
             <div class="price mt-1">{{ product.product_price }} Tk</div>
             <!-- price-wrap.// -->
-            <div class="rating-star">
-              <span>
-                <i class="
-                    fa fa-star{%
-                    if
-                    product.average_rating
-                    <
-                    0.5
-                    %}-o{%
-                    elif
-                    product.average_rating
-                    >=
-                    0.5
-                    and
-                    product.average_rating
-                    <
-                    1
-                    %}-half-o
-                    {%
-                    endif
-                    %}
-                  " aria-hidden="true"></i>
-                <i class="
-                    fa fa-star{%
-                    if
-                    product.average_rating
-                    <
-                    1.5
-                    %}-o{%
-                    elif
-                    product.average_rating
-                    >=
-                    1.5
-                    and
-                    product.average_rating
-                    <
-                    2
-                    %}-half-o
-                    {%
-                    endif
-                    %}
-                  " aria-hidden="true"></i>
-                <i class="
-                    fa fa-star{%
-                    if
-                    product.average_rating
-                    <
-                    2.5
-                    %}-o{%
-                    elif
-                    product.average_rating
-                    >=
-                    2.5
-                    and
-                    product.average_rating
-                    <
-                    3
-                    %}-half-o
-                    {%
-                    endif
-                    %}
-                  " aria-hidden="true"></i>
-                <i class="
-                    fa fa-star{%
-                    if
-                    product.average_rating
-                    <
-                    3.5
-                    %}-o{%
-                    elif
-                    product.average_rating
-                    >=
-                    3.5
-                    and
-                    product.average_rating
-                    <
-                    4
-                    %}-half-o
-                    {%
-                    endif
-                    %}
-                  " aria-hidden="true"></i>
-                <i class="
-                    fa fa-star{%
-                    if
-                    product.average_rating
-                    <
-                    4.5
-                    %}-o{%
-                    elif
-                    product.average_rating
-                    >=
-                    4.5
-                    and
-                    product.average_rating
-                    <
-                    5
-                    %}-half-o
-                    {%
-                    endif
-                    %}
-                  " aria-hidden="true"></i>
-              </span>
-            </div>
+              <div class="rating-star">
+                <span>
+                  <i class="fa fa-star{% if product.average_rating < 0.5 %}-o{% elif product.average_rating >= 0.5 and product.average_rating < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if product.average_rating < 1.5 %}-o{% elif product.average_rating >= 1.5 and product.average_rating < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if product.average_rating < 2.5 %}-o{% elif product.average_rating >= 2.5 and product.average_rating < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if product.average_rating < 3.5 %}-o{% elif product.average_rating >= 3.5 and product.average_rating < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if product.average_rating < 4.5 %}-o{% elif product.average_rating >= 4.5 and product.average_rating < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  {% if product.count_reviews > 0 %}<span>({{product.count_reviews}})</span>{% endif %}
+			          </span>
+		          </div> 
           </figcaption>
         </div>
       </div>
@@ -199,109 +105,15 @@
             <div class="price mt-1">{{ product.product_price }} Tk</div>
             <!-- price-wrap.// -->
             <div class="rating-star">
-              <span>
-                <i class="
-                    fa fa-star{%
-                    if
-                    product.average_rating
-                    <
-                    0.5
-                    %}-o{%
-                    elif
-                    product.average_rating
-                    >=
-                    0.5
-                    and
-                    product.average_rating
-                    <
-                    1
-                    %}-half-o
-                    {%
-                    endif
-                    %}
-                  " aria-hidden="true"></i>
-                <i class="
-                    fa fa-star{%
-                    if
-                    product.average_rating
-                    <
-                    1.5
-                    %}-o{%
-                    elif
-                    product.average_rating
-                    >=
-                    1.5
-                    and
-                    product.average_rating
-                    <
-                    2
-                    %}-half-o
-                    {%
-                    endif
-                    %}
-                  " aria-hidden="true"></i>
-                <i class="
-                    fa fa-star{%
-                    if
-                    product.average_rating
-                    <
-                    2.5
-                    %}-o{%
-                    elif
-                    product.average_rating
-                    >=
-                    2.5
-                    and
-                    product.average_rating
-                    <
-                    3
-                    %}-half-o
-                    {%
-                    endif
-                    %}
-                  " aria-hidden="true"></i>
-                <i class="
-                    fa fa-star{%
-                    if
-                    product.average_rating
-                    <
-                    3.5
-                    %}-o{%
-                    elif
-                    product.average_rating
-                    >=
-                    3.5
-                    and
-                    product.average_rating
-                    <
-                    4
-                    %}-half-o
-                    {%
-                    endif
-                    %}
-                  " aria-hidden="true"></i>
-                <i class="
-                    fa fa-star{%
-                    if
-                    product.average_rating
-                    <
-                    4.5
-                    %}-o{%
-                    elif
-                    product.average_rating
-                    >=
-                    4.5
-                    and
-                    product.average_rating
-                    <
-                    5
-                    %}-half-o
-                    {%
-                    endif
-                    %}
-                  " aria-hidden="true"></i>
-              </span>
-            </div>
+                <span>
+                  <i class="fa fa-star{% if product.average_rating < 0.5 %}-o{% elif product.average_rating >= 0.5 and product.average_rating < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if product.average_rating < 1.5 %}-o{% elif product.average_rating >= 1.5 and product.average_rating < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if product.average_rating < 2.5 %}-o{% elif product.average_rating >= 2.5 and product.average_rating < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if product.average_rating < 3.5 %}-o{% elif product.average_rating >= 3.5 and product.average_rating < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if product.average_rating < 4.5 %}-o{% elif product.average_rating >= 4.5 and product.average_rating < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+                  <span>({{product.count_reviews}})</span>
+			          </span>
+		          </div> 
           </figcaption>
         </div>
       </div>
@@ -325,8 +137,7 @@
 <script>
   $(function () {
     $("#searchproduct").autocomplete({
-      source: '{% url '
-      home ' %}'
+      source: '{% url 'home' %}'
     });
   });
 </script>
